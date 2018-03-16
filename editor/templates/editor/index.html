@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+
+<a href="{% url 'editor:index' %}">Index</a>
+<br>
+<form action="{% url 'editor:load_cards' %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+    <input name="vcf_file" type="file"/>
+    <input type="submit" value="Load cards"/>
+</form>
+
+<p>Cards:</p>
+{% if cards %}
+<table>
+    <tr>
+        <th>fn</th>
+        <th>n</th>
+        <th>tel</th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    {% for card in cards %}
+    <tr>
+        <form action="{% url 'editor:modify_card' %}" method="post">
+        {% csrf_token %}
+            <textarea hidden name="id">{{ card.id }}</textarea>
+            <th><textarea name="fn">{{ card.fn }}</textarea></th>
+            <th><textarea name="fn">{{ card.n }}</textarea></th>
+            <th><textarea name="fn">{{ card.tel }}</textarea></th>
+            <th><input type="submit" value="zmień"/></th>
+        </form>
+        <form action="{% url 'editor:delete_card' %}" method="post">
+        {% csrf_token %}
+            <th><input type="submit" value="usuń"/></th>
+        </form>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endif %}
+</body>
+</html>
